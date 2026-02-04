@@ -47,6 +47,13 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'PrimeTrade API is live 🚀'
+  });
+});
+
 app.use('*', (req, res) => {
   res.status(404).json({
     status: 'error',
