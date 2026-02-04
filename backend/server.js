@@ -11,6 +11,7 @@ const productRoutes = require('./routes/product.routes');
 const userRoutes = require('./routes/user.routes');
 
 const app = express();
+app.set('trust proxy', 1);
 
 /* -------------------- DATABASE -------------------- */
 connectDB();
@@ -29,6 +30,7 @@ app.use('/api/', limiter);
 /* -------------------- CORS (FIXED & PRODUCTION SAFE) -------------------- */
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  'https://primetrade-mohneesh.onrender.com',
   'http://localhost:5173'
 ];
 
