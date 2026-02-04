@@ -2,7 +2,6 @@
 
 A modern, full-stack e-commerce application built with the **MERN Stack** (MongoDB, Express, React, Node.js). Features a responsive design, user authentication, functionality for a shopping cart, and a comprehensive admin dashboard.
 
-![PrimeTrade Preview](https://via.placeholder.com/800x400.png?text=PrimeTrade+Dashboard+Preview)
 
 ---
 
@@ -148,11 +147,3 @@ primetrade-v0/
 ```
 
 ---
-
-## 🤝 Contributing
-
-1.  Fork the repository
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
