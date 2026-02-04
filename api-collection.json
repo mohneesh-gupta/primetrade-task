@@ -1,0 +1,439 @@
+{
+  "info": {
+    "name": "Product API Collection",
+    "description": "REST API with Authentication & Role-Based Access",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000/api/v1"
+    },
+    {
+      "key": "TOKEN",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Test@123\",\n  \"confirmPassword\": \"Test@123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('TOKEN', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/profile",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Admin@123\",\n  \"newPassword\": \"NewAdmin@123\",\n  \"confirmNewPassword\": \"NewAdmin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/password",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "password"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/logout",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products (Public)",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/products?page=1&limit=10",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Products by Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/products?category=Electronics",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "category", "value": "Electronics" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Products by Price Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/products?minPrice=10&maxPrice=100",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "minPrice", "value": "10" },
+                { "key": "maxPrice", "value": "100" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", ":id"],
+              "variable": [
+                { "key": "id", "value": "product_id_here" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products (Admin)",
+      "item": [
+        {
+          "name": "Get All Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/admin/all",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "admin", "all"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/admin/stats",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "admin", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Product\",\n  \"description\": \"This is a new product description\",\n  \"price\": 99.99,\n  \"category\": \"Electronics\",\n  \"stock\": 50,\n  \"imageUrl\": \"https://via.placeholder.com/400\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Product Name\",\n  \"price\": 149.99,\n  \"stock\": 25\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", ":id"],
+              "variable": [
+                { "key": "id", "value": "product_id_here" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", ":id"],
+              "variable": [
+                { "key": "id", "value": "product_id_here" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (Admin)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/users?page=1&limit=10",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/users/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                { "key": "id", "value": "user_id_here" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users/:id/role",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users", ":id", "role"],
+              "variable": [
+                { "key": "id", "value": "user_id_here" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/users/:id/status",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users", ":id", "status"],
+              "variable": [
+                { "key": "id", "value": "user_id_here" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/users/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                { "key": "id", "value": "user_id_here" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:5000/api/health",
+          "host": ["http://localhost:5000"],
+          "path": ["api", "health"]
+        }
+      }
+    }
+  ]
+}
